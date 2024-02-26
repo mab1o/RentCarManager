@@ -1,6 +1,7 @@
 package com.epf.rentmanager.dao;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,24 +77,19 @@ public class ReservationDao {
 		List<Reservation> reservations = new ArrayList<>();
 		try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_RESERVATIONS_BY_CLIENT_QUERY);) {
-			System.out.println("l1 reussi");
 			preparedStatement.setLong(1, clientId);
-			System.out.println("l2 reussi");
 			ResultSet resultSet = preparedStatement.executeQuery();
-			System.out.println("l3 reussi");
 
 			while (resultSet.next()) {
-				System.out.println("entre dans la boucle");
 				reservations.add(
 						new Reservation(resultSet.getLong("id"),
-								resultSet.getLong("client_id"),
+								clientId,
 								resultSet.getLong("vehicle_id"),
 								resultSet.getDate("debut").toLocalDate(),
 								resultSet.getDate("fin").toLocalDate()
 								)
 				);
 			}
-            System.out.println("linf reussi");
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la recherche des reservations par recherche du client.", e);
 		}
@@ -111,7 +107,7 @@ public class ReservationDao {
 				reservations.add(
 						new Reservation(resultSet.getLong("id"),
 								resultSet.getLong("client_id"),
-								resultSet.getLong("vehicle_id"),
+								vehicleId,
 								resultSet.getDate("debut").toLocalDate(),
 								resultSet.getDate("fin").toLocalDate()
 						)
