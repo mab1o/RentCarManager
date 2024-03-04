@@ -1,10 +1,9 @@
 package com.epf.rentmanager.servlet;
 
-import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.VehicleService;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +15,15 @@ import java.io.IOException;
 @WebServlet("/deleteVehicle")
 public class VehicleDeleteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+
+    @Autowired
+    private VehicleService vehicleService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -24,7 +31,6 @@ public class VehicleDeleteServlet extends HttpServlet {
 
         if (vehicleIdStr != null && !vehicleIdStr.isEmpty()) {
             long vehicleId = Long.parseLong(vehicleIdStr);
-            VehicleService vehicleService = context.getBean(VehicleService.class);;
             try {
                 vehicleService.delete(vehicleId);
             } catch (ServiceException e) {
@@ -36,5 +42,3 @@ public class VehicleDeleteServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/vehicles");
     }
 }
-
-
