@@ -30,4 +30,5 @@ public class VehicleListServlet extends HttpServlet {
         request.setAttribute("vehicles", vehicles);
         this.getServletContext().getRequestDispatcher("/WEB-INF/views/vehicles/list.jsp").forward(request, response);
     }
+
 }
