@@ -1,4 +1,5 @@
 package com.epf.rentmanager.ui.cli;
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
@@ -7,6 +8,8 @@ import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.service.VehicleService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -52,6 +55,11 @@ public class CommandLineInterface {
         }
     }
 
+    static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+    static ClientService clientservice = context.getBean(ClientService.class);
+    static VehicleService vehicleservice = context.getBean(VehicleService.class);
+    static ReservationService reservationservice = context.getBean(ReservationService.class);
+
     private static void createClient() {
 
         String nom = IOUtils.readString("Nom du client: ", true);
@@ -66,7 +74,6 @@ public class CommandLineInterface {
         client.setNaissance(naissance);
 
         try {
-            ClientService clientservice = ClientService.getInstance();
             long id = clientservice.create(client);
             System.out.println("Un nouveau client a ete crée avec l'id :" + id);
         } catch (ServiceException e) {
@@ -76,7 +83,6 @@ public class CommandLineInterface {
 
     private static void listClients() {
         try {
-            ClientService clientservice = ClientService.getInstance();
             List<Client> clients = clientservice.findAll();
             for (Client client : clients){
                 System.out.println(client);
@@ -98,7 +104,6 @@ public class CommandLineInterface {
         vehicle.setNb_places(nb_place);
 
         try {
-            VehicleService vehicleservice = VehicleService.getInstance();
             long id = vehicleservice.create(vehicle);
             System.out.println("Un nouveau vehicule a ete crée avec l'id :" + id);
         } catch (ServiceException e) {
@@ -108,7 +113,6 @@ public class CommandLineInterface {
 
     private static void listVehicles() {
         try {
-            VehicleService vehicleservice = VehicleService.getInstance();
             List<Vehicle> vehicles = vehicleservice.findAll();
             for (Vehicle vehicle : vehicles){
                 System.out.println(vehicle);
@@ -122,7 +126,6 @@ public class CommandLineInterface {
         long id = IOUtils.readInt("Id du client: ");
 
         try {
-            ClientService clientservice = ClientService.getInstance();
             long mes = clientservice.delete(id);
             System.out.println("Un client a ete suprimer : " + mes);
         } catch (ServiceException e) {
@@ -132,8 +135,6 @@ public class CommandLineInterface {
 
     private static void deleteVehicle() {
         long id = IOUtils.readInt("Id du vehicule: ");
-
-        VehicleService vehicleservice = VehicleService.getInstance();
         long mes = 0;
         try {
             mes = vehicleservice.delete(id);
@@ -156,7 +157,6 @@ public class CommandLineInterface {
         reservation.setFin(fin);
 
         try {
-            ReservationService reservationservice = ReservationService.getInstance();
             long id = reservationservice.create(reservation);
             System.out.println("Un nouveau reservation a ete crée avec l'id :" + id);
         } catch (ServiceException e) {
@@ -166,7 +166,6 @@ public class CommandLineInterface {
 
     private static void listReservation() {
         try {
-            ReservationService reservationservice = ReservationService.getInstance();
             List<Reservation> reservations = reservationservice.findAll();
             for (Reservation reservation : reservations){
                 System.out.println(reservation);
@@ -179,7 +178,6 @@ public class CommandLineInterface {
     private static void listReservationByVehicule() {
         long vehicle_id = IOUtils.readInt("Id du vehicule: ");
         try {
-            ReservationService reservationservice = ReservationService.getInstance();
             List<Reservation> reservations = reservationservice.findByVehicleId(vehicle_id);
             for (Reservation reservation : reservations){
                 System.out.println(reservation);
@@ -192,7 +190,6 @@ public class CommandLineInterface {
     private static void listReservationByClient() {
         long client_id = IOUtils.readInt("Id du client: ");
         try {
-            ReservationService reservationservice = ReservationService.getInstance();
             List<Reservation> reservations = reservationservice.findByClientId(client_id);
             for (Reservation reservation : reservations){
                 System.out.println(reservation);
@@ -204,8 +201,6 @@ public class CommandLineInterface {
 
     private static void deleteReservation() {
         long id = IOUtils.readInt("Id de la reservation: ");
-
-        ReservationService reservationservice = ReservationService.getInstance();
         long mes = 0;
         try {
             mes = reservationservice.delete(id);
@@ -217,7 +212,6 @@ public class CommandLineInterface {
 
     private static void countVehicles() {
         try {
-            VehicleService vehicleservice = VehicleService.getInstance();
             int nb_vehicle = vehicleservice.count();
             System.out.println("nb de vehicle: " + nb_vehicle);
         } catch (ServiceException e) {

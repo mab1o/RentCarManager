@@ -1,8 +1,11 @@
 package com.epf.rentmanager.servlet;
 
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.VehicleService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +18,7 @@ import java.util.List;
 @WebServlet("/vehicles/create")
 public class VehicleCreateServlet extends HttpServlet{
     private static final long serialVersionUID = 1L;
+    static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Affichage du formulaire
@@ -34,7 +38,7 @@ public class VehicleCreateServlet extends HttpServlet{
         vehicle.setNb_places(numberOfSeats);
 
         try {
-            VehicleService vehicleservice = VehicleService.getInstance();
+            VehicleService vehicleservice = context.getBean(VehicleService.class);;
             long id = vehicleservice.create(vehicle);
             System.out.println("Un nouveau vehicule a ete crée avec l'id :" + id);
 
