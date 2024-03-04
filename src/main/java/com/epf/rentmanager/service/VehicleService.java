@@ -60,5 +60,13 @@ public class VehicleService {
 			throw new ServiceException("DAO : ",e);
         }
     }
+
+	public int count() throws ServiceException{
+		try {
+			return vehicleDao.count();
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors de la récupération du nombre de véhicules", e);
+		}
+	}
 	
 }

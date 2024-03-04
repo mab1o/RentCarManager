@@ -25,8 +25,9 @@ public class VehicleDao {
 	
 	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLE_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
+	private static final String FIND_VEHICLE_QUERY   = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
+	private static final String FIND_VEHICLES_QUERY  = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
+	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) FROM Vehicle;";
 	
 	public long create(@NotNull Vehicle vehicle) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -108,6 +109,20 @@ public class VehicleDao {
 			throw new DaoException("Erreur lors de la recherche de tous les véhicules.", e);
 		}
 		return vehicles;
+	}
+
+	public int count() throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(COUNT_VEHICLES_QUERY);
+			 ResultSet resultSet = preparedStatement.executeQuery()) {
+			if (resultSet.next()) {
+				return resultSet.getInt(1);
+			} else {
+				throw new DaoException("Erreur lors de la récupération du nombre de véhicules");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de véhicules", e);
+		}
 	}
 
 }

@@ -28,6 +28,7 @@ public class CommandLineInterface {
             System.out.println("9. Lister toutes les Réservations associées à un Véhicule donné");
             System.out.println("10. Lister toutes les Réservations associées à un Client donné");
             System.out.println("11. Supprimer une Réservation");
+            System.out.println("12. le nombre de vehicule referencer");
 
             // lire choix
             int choice = IOUtils.readInt("Choix: ");
@@ -44,6 +45,7 @@ public class CommandLineInterface {
                 case 9:  listReservationByVehicule();   break;
                 case 10: listReservationByClient();     break;
                 case 11: deleteReservation();           break;
+                case 12: countVehicles();               break;
                 case 0:  exit = true;                   break;
                 default: System.out.println("Choix invalide.");
             }
@@ -211,6 +213,16 @@ public class CommandLineInterface {
             System.out.println(e);
         }
         System.out.println("Un vehicule a ete suprimer : " + mes);
+    }
+
+    private static void countVehicles() {
+        try {
+            VehicleService vehicleservice = VehicleService.getInstance();
+            int nb_vehicle = vehicleservice.count();
+            System.out.println("nb de vehicle: " + nb_vehicle);
+        } catch (ServiceException e) {
+            System.out.println(e);
+        }
     }
 
 }

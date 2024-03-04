@@ -15,7 +15,7 @@
         <section class="content-header">
             <h1>
                 Voitures
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/cars/create">Ajouter</a>
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/vehicles/create">Ajouter</a>
             </h1>
         </section>
 
