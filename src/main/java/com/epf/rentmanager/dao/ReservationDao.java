@@ -17,15 +17,22 @@ import org.springframework.stereotype.Repository;
 public class ReservationDao {
 	private ReservationDao() {}
 	
-	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
-	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
-	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
-	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
-	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
+	private static final String CREATE_RESERVATION_QUERY
+			= "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
+	private static final String DELETE_RESERVATION_QUERY
+			= "DELETE FROM Reservation WHERE id=?;";
+	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY
+			= "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
+	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY
+			= "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
+	private static final String FIND_RESERVATIONS_QUERY
+			= "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
 		
 	public long create(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(CREATE_RESERVATION_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			 PreparedStatement preparedStatement =
+					 connection.prepareStatement(CREATE_RESERVATION_QUERY,
+							 PreparedStatement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setLong(1, reservation.getClient_id());
 			preparedStatement.setLong(2, reservation.getVehicule_id());
 			preparedStatement.setDate(3, Date.valueOf(reservation.getDebut()));
@@ -34,7 +41,8 @@ public class ReservationDao {
 			int affectedRows = preparedStatement.executeUpdate();
 
 			if (affectedRows == 0) {
-				throw new DaoException("La création d'un reservation a échoué, aucune ligne ajoutée dans la base de données.");
+				throw new DaoException(
+						"La création d'un reservation a échoué, aucune ligne ajoutée dans la base de données.");
 			}
 
 			try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {

@@ -20,15 +20,21 @@ public class VehicleDao {
 
 	private VehicleDao() {}
 	
-	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
-	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLE_QUERY   = "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
-	private static final String FIND_VEHICLES_QUERY  = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
-	private static final String COUNT_VEHICLES_QUERY = "SELECT COUNT(*) FROM Vehicle;";
+	private static final String CREATE_VEHICLE_QUERY
+			= "INSERT INTO Vehicle(constructeur, modele, nb_places) VALUES(?, ?, ?);";
+	private static final String DELETE_VEHICLE_QUERY
+			= "DELETE FROM Vehicle WHERE id=?;";
+	private static final String FIND_VEHICLE_QUERY
+			= "SELECT id, constructeur, modele, nb_places FROM Vehicle WHERE id=?;";
+	private static final String FIND_VEHICLES_QUERY
+			= "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
+	private static final String COUNT_VEHICLES_QUERY
+			= "SELECT COUNT(*) FROM Vehicle;";
 	
 	public long create(@NotNull Vehicle vehicle) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(CREATE_VEHICLE_QUERY, PreparedStatement.RETURN_GENERATED_KEYS)) {
+			 PreparedStatement preparedStatement = connection.prepareStatement(CREATE_VEHICLE_QUERY,
+					 PreparedStatement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setString(1, vehicle.getConstructeur());
 			preparedStatement.setString(2, vehicle.getModele());
 			preparedStatement.setInt(3, vehicle.getNb_places());
@@ -36,7 +42,8 @@ public class VehicleDao {
 			int affectedRows = preparedStatement.executeUpdate();
 
 			if (affectedRows == 0) {
-				throw new DaoException("La création du véhicule a échoué, aucune ligne ajoutée dans la base de données.");
+				throw new DaoException(
+						"La création du véhicule a échoué, aucune ligne ajoutée dans la base de données.");
 			}
 
 			try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
