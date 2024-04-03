@@ -2,9 +2,11 @@ package com.epf.rentmanager.ui.cli;
 import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.ReservationComplete;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationCompleteService;
 import com.epf.rentmanager.service.VehicleService;
 import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.utils.IOUtils;
@@ -32,6 +34,8 @@ public class CommandLineInterface {
             System.out.println("10. Lister toutes les Réservations associées à un Client donné");
             System.out.println("11. Supprimer une Réservation");
             System.out.println("12. le nombre de vehicule referencer");
+            System.out.println("13. la list de reservation complete");
+            System.out.println("14. Affiche le client d'un id donné");
 
             // lire choix
             int choice = IOUtils.readInt("Choix: ");
@@ -49,16 +53,22 @@ public class CommandLineInterface {
                 case 10: listReservationByClient();     break;
                 case 11: deleteReservation();           break;
                 case 12: countVehicles();               break;
+                case 13: listReservationComplete();     break;
+                case 14: listClientsById();             break;
                 case 0:  exit = true;                   break;
                 default: System.out.println("Choix invalide.");
             }
         }
     }
 
+
+
+
     static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
     static ClientService clientservice = context.getBean(ClientService.class);
     static VehicleService vehicleservice = context.getBean(VehicleService.class);
     static ReservationService reservationservice = context.getBean(ReservationService.class);
+    static ReservationCompleteService reservationcompleteservice = context.getBean(ReservationCompleteService.class);
 
     private static void createClient() {
 
@@ -219,4 +229,25 @@ public class CommandLineInterface {
         }
     }
 
+    // les erreur trows sont des client ou vehicule non trouvé car suprimer precedement
+    private static void listReservationComplete() {
+        try {
+            List<ReservationComplete> reservationCompletes = reservationcompleteservice.findAll();
+            for (ReservationComplete reservation : reservationCompletes){
+                System.out.println(reservation);
+            }
+        } catch (ServiceException e) {
+            System.out.println(e);
+        }
+    }
+
+    private static void listClientsById() {
+        long client_id = IOUtils.readInt("Id du client: ");
+        try {
+            Client client = clientservice.findById(client_id);
+            System.out.println(client);
+        } catch (ServiceException e) {
+            System.out.println(e);
+        }
+    }
 }

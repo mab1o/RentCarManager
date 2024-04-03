@@ -2,6 +2,7 @@ package com.epf.rentmanager.service;
 
 import java.util.List;
 
+import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Service;
 public class VehicleService {
 
 	private VehicleDao vehicleDao;
+	private ReservationDao reservationDao;
 
 	@Autowired
-	private VehicleService(VehicleDao vehicleDao) {
+	private VehicleService(VehicleDao vehicleDao, ReservationDao reservationDao) {
 		this.vehicleDao = vehicleDao;
+		this.reservationDao = reservationDao;
 	}
 
 	public long create(Vehicle vehicle) throws ServiceException {
@@ -33,6 +36,7 @@ public class VehicleService {
 
 	public long delete(long id) throws ServiceException {
 		try {
+			reservationDao.deleteByVehicle(id);
 			return vehicleDao.delete(id);
 		} catch (DaoException e) {
 			throw new ServiceException("DAO : ",e);

@@ -73,7 +73,7 @@ public class ClientDao {
 			preparedStatement.setLong(1, id);
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
 				if (resultSet.next()) {
-					return new Client(resultSet.getLong("id"),
+					return new Client(id,
 							resultSet.getString("nom"),
 							resultSet.getString("prenom"),
 							resultSet.getString("email"),

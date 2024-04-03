@@ -21,6 +21,10 @@ public class ReservationDao {
 			= "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY
 			= "DELETE FROM Reservation WHERE id=?;";
+	private static final String DELETE_RESERVATION_BY_CLIENT_QUERY
+			= "DELETE FROM Reservation WHERE client_id=?;";
+	private static final String DELETE_RESERVATION_BY_VEHICLE_QUERY
+			= "DELETE FROM Reservation WHERE vehicle_id=?;";
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY
 			= "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY
@@ -59,8 +63,31 @@ public class ReservationDao {
 	
 	public long delete(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
-			 PreparedStatement preparedStatement = connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
+			 PreparedStatement preparedStatement =
+					 connection.prepareStatement(DELETE_RESERVATION_QUERY)) {
 			preparedStatement.setLong(1, reservation.getId());
+			return preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la suppression d'une reservation.", e);
+		}
+	}
+
+	public long deleteByClient(long id) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement =
+					 connection.prepareStatement(DELETE_RESERVATION_BY_CLIENT_QUERY)) {
+			preparedStatement.setLong(1, id);
+			return preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la suppression d'une reservation.", e);
+		}
+	}
+
+	public long deleteByVehicle(long id) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement =
+					 connection.prepareStatement(DELETE_RESERVATION_BY_VEHICLE_QUERY)) {
+			preparedStatement.setLong(1, id);
 			return preparedStatement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la suppression d'une reservation.", e);

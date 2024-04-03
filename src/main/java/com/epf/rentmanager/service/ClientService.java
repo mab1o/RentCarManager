@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.dao.ClientDao;
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class ClientService {
 
 	private final ClientDao clientDao;
+	private final ReservationDao reservationDao;
 
 	@Autowired
-	public ClientService(ClientDao clientDao) {
+	public ClientService(ClientDao clientDao, ReservationDao reservationDao) {
 		this.clientDao = clientDao;
+		this.reservationDao = reservationDao;
 	}
 
 	public long create(Client client) throws ServiceException {
@@ -29,16 +32,17 @@ public class ClientService {
             try {
                 return clientDao.create(client);
             } catch (DaoException e) {
-                throw new ServiceException("DAO : ",e);
+                throw new ServiceException("Le client n'a pas pu etre creer :",e);
             }
         }
 	}
 
 	public long delete(long id) throws ServiceException {
 		try {
+			reservationDao.deleteByClient(id);
 			return clientDao.delete(id);
 		} catch (DaoException e) {
-			throw new ServiceException("DAO : ",e);
+			throw new ServiceException("Erreur lors de la supression d'un client : ",e);
 		}
 	}
 
@@ -46,7 +50,7 @@ public class ClientService {
         try {
             return clientDao.findById(id);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ",e);
+            throw new ServiceException("Erreur lors de rechercher du client : ",e);
         }
     }
 
@@ -54,7 +58,7 @@ public class ClientService {
         try {
             return clientDao.findAll();
         } catch (DaoException e) {
-			throw new ServiceException("DAO : ",e);
+			throw new ServiceException("Erreur lors de rechercher des clients : ",e);
         }
     }
 	
