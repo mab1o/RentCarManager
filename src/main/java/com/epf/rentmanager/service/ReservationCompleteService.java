@@ -21,11 +21,23 @@ public class ReservationCompleteService {
     @Autowired
     private ReservationService reservationService;
 
+    public List<ReservationComplete> findByClientId(long id) throws ServiceException{
+        List<ReservationComplete> reservationCompletes = new ArrayList<>();
+        List<Reservation> reservations = null;
+
+        reservations = reservationService.findByClientId(id);
+        return getReservationCompletes(reservationCompletes, reservations);
+    }
+
     public List<ReservationComplete> findAll() throws ServiceException{
         List<ReservationComplete> reservationCompletes = new ArrayList<>();
         List<Reservation> reservations = null;
 
         reservations = reservationService.findAll();
+        return getReservationCompletes(reservationCompletes, reservations);
+    }
+
+    private List<ReservationComplete> getReservationCompletes(List<ReservationComplete> reservationCompletes, List<Reservation> reservations) {
         for (Reservation reservation : reservations){
 
             Client client = null;
