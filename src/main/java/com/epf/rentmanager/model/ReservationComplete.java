@@ -1,10 +1,13 @@
 package com.epf.rentmanager.model;
 
+import java.time.format.DateTimeFormatter;
+
 public class ReservationComplete {
 
     private Reservation reservation;
     private Client client;
     private Vehicle vehicle;
+    private String prettyDebut, prettyFin;
 
     public ReservationComplete() {
     }
@@ -13,6 +16,8 @@ public class ReservationComplete {
         this.reservation = reservation;
         this.client = client;
         this.vehicle = vehicle;
+        modPrettyDebut();
+        modPrettyFin();
     }
 
     public Reservation getReservation() {
@@ -21,6 +26,8 @@ public class ReservationComplete {
 
     public void setReservation(Reservation reservation) {
         this.reservation = reservation;
+        modPrettyDebut();
+        modPrettyFin();
     }
 
     public Client getClient() {
@@ -37,6 +44,23 @@ public class ReservationComplete {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public String getPrettyDebut() {
+        return prettyDebut;
+    }
+    public String getPrettyFin() {
+        return prettyFin;
+    }
+
+    public void modPrettyFin() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        prettyFin = reservation.getFin().format(formatter);
+    }
+
+    public void modPrettyDebut() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        prettyDebut = reservation.getDebut().format(formatter);
     }
 
     @Override

@@ -62,8 +62,6 @@ public class CommandLineInterface {
     }
 
 
-
-
     static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
     static ClientService clientservice = context.getBean(ClientService.class);
     static VehicleService vehicleservice = context.getBean(VehicleService.class);

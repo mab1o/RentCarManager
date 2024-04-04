@@ -1,11 +1,11 @@
 package com.epf.rentmanager.model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Reservation {
-    private long id, client_id, vehicule_id;;
+    private long id, client_id, vehicule_id;
     private LocalDate debut, fin;
-    //ps.setDate(Date.valueOf(maDate))
 
     public Reservation(long id, long client_id, long vehicule_id, LocalDate debut, LocalDate fin) {
         this.id = id;
@@ -44,17 +44,13 @@ public class Reservation {
         return debut;
     }
 
-    public void setDebut(LocalDate debut) {
-        this.debut = debut;
-    }
+    public void setDebut(LocalDate debut) {this.debut = debut;}
 
     public LocalDate getFin() {
         return fin;
     }
 
-    public void setFin(LocalDate fin) {
-        this.fin = fin;
-    }
+    public void setFin(LocalDate fin) {this.fin = fin;}
 
     @Override
     public String toString() {
