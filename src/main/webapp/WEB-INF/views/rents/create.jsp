@@ -25,15 +25,16 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form class="form-horizontal" method="post" action="/rents/create">
+                        <form class="form-horizontal" method="post" action="${pageContext.request.contextPath}/rents/create">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="car" class="col-sm-2 control-label">Voiture</label>
 
                                     <div class="col-sm-10">
-                                        <select class="form-control" id="car" name="car">
-                                            <option value="1">Renault Clio</option>
-                                            <option value="2">Citroen C2</option>
+                                        <select class="form-control" id="car" name="car" required>
+                                            <c:forEach items="${vehicles}" var="vehicle">
+                                                <option value=${vehicle.id}> ${vehicle.constructeur} ${vehicle.modele}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                 </div>
@@ -41,9 +42,10 @@
                                     <label for="client" class="col-sm-2 control-label">Client</label>
 
                                     <div class="col-sm-10">
-                                        <select class="form-control" id="client" name="client">
-                                            <option value="1">John Doe</option>
-                                            <option value="2">Jane Doe</option>
+                                        <select class="form-control" id="client" name="client" required>
+                                            <c:forEach items="${clients}" var="client">
+                                                <option value=${client.id}> ${client.nom} ${client.prenom}</option>
+                                            </c:forEach>
                                         </select>
                                     </div>
                                 </div>
