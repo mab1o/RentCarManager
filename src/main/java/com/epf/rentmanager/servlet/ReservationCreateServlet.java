@@ -59,29 +59,23 @@ public class  ReservationCreateServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("3");
         long carId= Long.parseLong(
                 request.getParameter("car"));
-        System.out.println("5");
         long clientId = Long.parseLong(
                 request.getParameter("client"));
-        System.out.println("4");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate beginDate = LocalDate.parse(
                 request.getParameter("begin"),dateFormatter);
         LocalDate endDate =
                 LocalDate.parse(request.getParameter("end"),dateFormatter);
-        System.out.println("7");
 
         Reservation reservation = new Reservation();
         reservation.setVehicule_id(carId);
         reservation.setClient_id(clientId);
         reservation.setDebut(beginDate);
         reservation.setFin(endDate);
-        System.out.println("2");
 
         try {
-            System.out.println("8");
             reservationService.create(reservation);
         } catch (ServiceException e) {
             System.out.println(e);
