@@ -42,13 +42,13 @@ public class ClientUpdateServlet extends HttpServlet {
             } catch (ServiceException e) {
                 System.out.println("Erreur lors la recherche du client :" + e);
             }
+            request.setAttribute("client",client);
+            request.getRequestDispatcher("/WEB-INF/views/users/update.jsp").forward(request, response);
+
         } else {
             response.sendRedirect(request.getContextPath() + "/users");
             System.out.println("L'id n'est pas reconnu ou existant");
         }
-
-        request.setAttribute("client",client);
-        request.getRequestDispatcher("/WEB-INF/views/users/update.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
