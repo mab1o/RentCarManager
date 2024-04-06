@@ -33,7 +33,6 @@
                                     <div class="col-sm-10">
                                         <select class="form-control" id="car" name="car" required>
                                             <c:forEach items="${vehicles}" var="vehicle">
-                                                <option value=${vehicle.id}> ${vehicle.constructeur} ${vehicle.modele}</option>
                                                 <c:choose>
                                                     <c:when test="${vehicle.id eq reservation.vehicule_id}">
                                                         <option value=${vehicle.id} selected> ${vehicle.constructeur} ${vehicle.modele}</option>
