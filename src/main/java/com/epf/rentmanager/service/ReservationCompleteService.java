@@ -29,6 +29,14 @@ public class ReservationCompleteService {
         return getReservationCompletes(reservationCompletes, reservations);
     }
 
+    public List<ReservationComplete> findByVehicleId(long id) throws ServiceException{
+        List<ReservationComplete> reservationCompletes = new ArrayList<>();
+        List<Reservation> reservations = null;
+
+        reservations = reservationService.findByVehicleId(id);
+        return getReservationCompletes(reservationCompletes, reservations);
+    }
+
     public List<ReservationComplete> findAll() throws ServiceException{
         List<ReservationComplete> reservationCompletes = new ArrayList<>();
         List<Reservation> reservations = null;
