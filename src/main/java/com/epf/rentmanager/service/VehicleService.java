@@ -34,6 +34,18 @@ public class VehicleService {
         }
 	}
 
+	public void update(Vehicle vehicle) throws ServiceException {
+		if (vehicle.getConstructeur()== null || vehicle.getNb_places() <= 1){
+			throw new ServiceException("Un vehicule ne peut pas avoir un constructeur vide ou un nb place <= 1") ;
+		}else{
+			try {
+				vehicleDao.update(vehicle);
+			} catch (DaoException e) {
+				throw new ServiceException("DAO : ",e);
+			}
+		}
+	}
+
 	public long delete(long id) throws ServiceException {
 		try {
 			reservationDao.deleteByVehicle(id);
