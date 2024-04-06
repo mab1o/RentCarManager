@@ -52,7 +52,7 @@
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-danger"
-                                           href="${pageContext.request.contextPath}/deleteVehicle?id=${vehicle.id}">
+                                           href="${pageContext.request.contextPath}/vehicle/delete?id=${vehicle.id}">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

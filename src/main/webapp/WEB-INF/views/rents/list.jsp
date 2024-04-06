@@ -50,7 +50,7 @@
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-danger"
-                                               href="${pageContext.request.contextPath}/deleteRent?id=${reservationComplete.reservation.id}">
+                                               href="${pageContext.request.contextPath}/rents/delete?id=${reservationComplete.reservation.id}">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </td>
