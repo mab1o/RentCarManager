@@ -45,6 +45,18 @@ public class ReservationCompleteService {
         return getReservationCompletes(reservationCompletes, reservations);
     }
 
+    public ReservationComplete findById(long id) throws ServiceException {
+        List<ReservationComplete> reservationCompletes = new ArrayList<>();
+        List<Reservation> reservations = new ArrayList<>();
+
+        Reservation reservation = reservationService.findById(id);
+        if (reservation != null){
+            reservations.add(reservation);
+            return getReservationCompletes(reservationCompletes, reservations).get(0);
+        }
+        return null;
+    }
+
     private List<ReservationComplete> getReservationCompletes(List<ReservationComplete> reservationCompletes, List<Reservation> reservations) {
         for (Reservation reservation : reservations){
 
@@ -68,4 +80,5 @@ public class ReservationCompleteService {
         }
         return reservationCompletes;
     }
+
 }
