@@ -1,13 +1,12 @@
 package com.epf.rentmanager.service;
+
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.model.Reservation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ReservationService {
@@ -22,6 +21,14 @@ public class ReservationService {
     public long create(Reservation reservation) throws ServiceException {
         try {
             return reservationDao.create(reservation);
+        } catch (DaoException e) {
+            throw new ServiceException("DAO : ", e);
+        }
+    }
+
+    public void update(Reservation reservation) throws ServiceException {
+        try {
+            reservationDao.update(reservation);
         } catch (DaoException e) {
             throw new ServiceException("DAO : ", e);
         }
@@ -54,6 +61,14 @@ public class ReservationService {
     public List<Reservation> findAll() throws ServiceException {
         try {
             return reservationDao.findAll();
+        } catch (DaoException e) {
+            throw new ServiceException("DAO : ", e);
+        }
+    }
+
+    public Reservation findById(long id) throws ServiceException {
+        try {
+            return reservationDao.findById(id);
         } catch (DaoException e) {
             throw new ServiceException("DAO : ", e);
         }

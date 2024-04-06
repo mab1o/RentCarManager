@@ -39,16 +39,18 @@
                                         <td>${reservationComplete.reservation.id}</td>
                                         <td>${reservationComplete.vehicle.constructeur} ${reservationComplete.vehicle.modele}</td>
                                         <td>${reservationComplete.client.prenom} ${reservationComplete.client.nom}</td>
-                                        <td>${reservationComplete.prettyDebut}</td>
-                                        <td>${reservationComplete.prettyFin}</td>
+                                        <td>${reservationComplete.reservation.prettyDebut}</td>
+                                        <td>${reservationComplete.reservation.prettyFin}</td>
                                         <td>
                                             <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=2">
                                                 <i class="fa fa-play"></i>
                                             </a>
-                                            <a class="btn btn-success disabled" href="#">
+                                            <a class="btn btn-success"
+                                               href="${pageContext.request.contextPath}/rents/update?id=${reservationComplete.reservation.id}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
-                                            <a class="btn btn-danger" href="${pageContext.request.contextPath}/deleteRent?id=${reservationComplete.reservation.id}">
+                                            <a class="btn btn-danger"
+                                               href="${pageContext.request.contextPath}/deleteRent?id=${reservationComplete.reservation.id}">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </td>
