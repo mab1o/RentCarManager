@@ -1,11 +1,13 @@
 package com.epf.rentmanager.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Client {
     private long id;
     private String nom, prenom, email;
     private LocalDate naissance;
+    private String pretty;
 
     public Client(long id, String nom, String prenom, String email, LocalDate naissance) {
         this.id = id;
@@ -13,6 +15,7 @@ public class Client {
         this.prenom = prenom;
         this.email = email;
         this.naissance = naissance;
+        modPretty();
     }
 
     public Client() {
@@ -38,7 +41,7 @@ public class Client {
         return naissance;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -56,6 +59,16 @@ public class Client {
 
     public void setNaissance(LocalDate naissance) {
         this.naissance = naissance;
+        this.modPretty();
+    }
+
+    public String getPretty() {
+        return pretty;
+    }
+
+    public void modPretty() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        this.pretty = this.naissance.format(formatter);
     }
 
     @Override

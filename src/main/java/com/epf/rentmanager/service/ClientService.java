@@ -37,6 +37,19 @@ public class ClientService {
         }
 	}
 
+	public void update(Client client) throws ServiceException {
+		if (Objects.equals(client.getNom(), "") || Objects.equals(client.getPrenom(), "")){
+			throw new ServiceException("Service : Un client ne peut pas avoir un prenom ou un nom null") ;
+		}else{
+			client.setNom(client.getNom().toUpperCase());
+			try {
+				clientDao.update(client);
+			} catch (DaoException e) {
+				throw new ServiceException("Le client n'a pas pu etre modifier :",e);
+			}
+		}
+	}
+
 	public long delete(long id) throws ServiceException {
 		try {
 			reservationDao.deleteByClient(id);

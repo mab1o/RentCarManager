@@ -21,6 +21,7 @@ public class ClientDao {
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
 	private static final String COUNT_CLIENT_QUERY = "SELECT COUNT(*) FROM Client;";
+	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
 	
 	public long create(Client client) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -45,6 +46,25 @@ public class ClientDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur lors de la création d'un client.", e);
+		}
+	}
+
+	public void update(Client client) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLIENT_QUERY)) {
+			preparedStatement.setString(1, client.getNom());
+			preparedStatement.setString(2, client.getPrenom());
+			preparedStatement.setString(3, client.getEmail());
+			preparedStatement.setDate(4, Date.valueOf(client.getNaissance()));
+			preparedStatement.setLong(5,client.getId());
+
+			int affectedRows = preparedStatement.executeUpdate();
+
+			if (affectedRows == 0) {
+				throw new DaoException("La modification du client a échoué, aucune ligne modifié dans la base de données.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la modification du client.", e);
 		}
 	}
 	

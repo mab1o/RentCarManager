@@ -31,6 +31,7 @@
                                     <th>Nom</th>
                                     <th>Prenom</th>
                                     <th>Email</th>
+                                    <th>Date de naissance</th>
                                     <th>Action</th>
                                 </tr>
                                 <c:forEach items="${clients}" var="client">
@@ -39,11 +40,12 @@
                                         <td>${client.nom}</td>
                                         <td>${client.prenom}</td>
                                         <td>${client.email}</td>
+                                        <td>${client.pretty}</td>
                                         <td>
                                             <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/details?id=${client.id}">
                                                 <i class="fa fa-play"></i>
                                             </a>
-                                            <a class="btn btn-success disabled" href="#">
+                                            <a class="btn btn-success" href="${pageContext.request.contextPath}/users/update?id=${client.id}">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-danger" href="${pageContext.request.contextPath}/deleteUser?id=${client.id}">
