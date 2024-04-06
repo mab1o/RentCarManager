@@ -52,8 +52,8 @@
                                             <tr>
                                                 <td>${reservationComplete.reservation.id}</td>
                                                 <td>${reservationComplete.vehicle.constructeur} ${reservationComplete.vehicle.modele}</td>
-                                                <td>${reservationComplete.prettyDebut}</td>
-                                                <td>${reservationComplete.prettyFin}</td>
+                                                <td>${reservationComplete.reservation.prettyDebut}</td>
+                                                <td>${reservationComplete.reservation.prettyFin}</td>
                                             </tr>
                                         </c:forEach>
                                     </table>
