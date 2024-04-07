@@ -1,6 +1,7 @@
 package com.epf.rentmanager.service;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,29 +26,50 @@ public class ClientService {
 	}
 
 	public long create(Client client) throws ServiceException {
-		if (Objects.equals(client.getNom(), "") || Objects.equals(client.getPrenom(), "")){
-			throw new ServiceException("Service : Un client ne peut pas avoir un prenom ou un nom null") ;
-		}else{
-			client.setNom(client.getNom().toUpperCase());
+		if (valuesOk(client)) {
+			client = prepareValues(client);
             try {
                 return clientDao.create(client);
             } catch (DaoException e) {
                 throw new ServiceException("Le client n'a pas pu etre creer :",e);
             }
         }
+		return -1;
 	}
 
 	public void update(Client client) throws ServiceException {
-		if (Objects.equals(client.getNom(), "") || Objects.equals(client.getPrenom(), "")){
-			throw new ServiceException("Service : Un client ne peut pas avoir un prenom ou un nom null") ;
-		}else{
-			client.setNom(client.getNom().toUpperCase());
+		if (valuesOk(client)) {
+			client = prepareValues(client);
 			try {
 				clientDao.update(client);
 			} catch (DaoException e) {
 				throw new ServiceException("Le client n'a pas pu etre modifier :",e);
 			}
 		}
+	}
+
+	public boolean valuesOk (Client client) throws ServiceException{
+		Period period = Period.between(client.getNaissance(), LocalDate.now());
+
+		boolean nameOk = !Objects.equals(client.getNom(), "");
+		boolean prenomOk = !Objects.equals(client.getPrenom(), "");
+		boolean ageOk = period.getYears() >= 18;
+
+		if (!nameOk){
+			throw new ServiceException("Service : Un client ne peut pas avoir un nom null ") ;
+		}
+		if (!prenomOk){
+			throw new ServiceException("Service : Un client ne peut pas avoir un prenom null") ;
+		}
+		if (!ageOk){
+			throw new ServiceException("Service : Un client ne peut pas avoir mois de 18 ans") ;
+		}
+		return true; // if not true, return exception
+	}
+
+	public Client prepareValues (Client client){
+		client.setNom(client.getNom().toUpperCase());
+		return client;
 	}
 
 	public long delete(long id) throws ServiceException {
