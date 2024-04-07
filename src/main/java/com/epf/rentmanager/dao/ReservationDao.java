@@ -1,6 +1,8 @@
 package com.epf.rentmanager.dao;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,10 @@ public class ReservationDao {
 			"((debut >= ? AND debut <= ?) " +
 			"OR (fin >= ? AND fin <= ?)" +
 			"OR (debut <= ? AND fin >= ?));";
+	public static final String COUNT_RESERVATION_SAME_CLIENT_VEHICLE_QUERY = "SELECT COUNT(*) " +
+			"FROM Reservation " +
+			"WHERE vehicle_id=? AND client_id=? AND " +
+			"((debut <= ? AND fin = ?) OR (debut = ? AND fin >= ?));";
 		
 	public long create(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -256,6 +262,37 @@ public class ReservationDao {
 			}
 		} catch (SQLException e) {
 			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation entre deux dates données.", e);
+		}
+	}
+
+	public int countReservationForSameVehicleClient(Reservation reservation) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(
+					 COUNT_RESERVATION_SAME_CLIENT_VEHICLE_QUERY);) {
+
+			long duree = ChronoUnit.DAYS.between(reservation.getDebut(), reservation.getFin());
+			long dureeMax = 7L;
+			LocalDate debutMin = reservation.getDebut().minusDays(dureeMax-duree);
+			LocalDate finMin = reservation.getDebut().minusDays(1);
+			LocalDate debutMax = reservation.getFin().plusDays(1);
+			LocalDate finMax = reservation.getFin().plusDays(dureeMax-duree);
+
+			preparedStatement.setLong(1,reservation.getVehicule_id());
+			preparedStatement.setLong(2,reservation.getClient_id());
+			preparedStatement.setDate(3,Date.valueOf(debutMin));
+			preparedStatement.setDate(4,Date.valueOf(finMin));
+			preparedStatement.setDate(5,Date.valueOf(debutMax));
+			preparedStatement.setDate(6,Date.valueOf(finMax));
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getInt(1);
+			} else {
+				throw new DaoException("Erreur lors de la récupération du nombre de reservation entre deux dates " +
+						"données pour un client et un vehicule donnée.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation entre deux dates " +
+					"données pour un client et un vehicule donnée.", e);
 		}
 	}
 
