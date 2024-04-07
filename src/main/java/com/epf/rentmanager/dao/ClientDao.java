@@ -22,6 +22,7 @@ public class ClientDao {
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
 	private static final String COUNT_CLIENT_QUERY = "SELECT COUNT(*) FROM Client;";
 	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client SET nom=?, prenom=?, email=?, naissance=? WHERE id=?;";
+	private static final String FIND_CLIENT_BY_EMAIL_QUERY =  "SELECT id, nom, prenom, naissance FROM Client WHERE email=?;";
 	
 	public long create(Client client) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -139,6 +140,28 @@ public class ClientDao {
 		} catch (SQLException e) {
 			throw new DaoException("Erreur SQL lors de la récupération du nombre de client.", e);
 		}
+	}
+
+	public List<Client> findByEmail(Client client) throws DaoException {
+		List<Client> clients = new ArrayList<>();
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(FIND_CLIENT_BY_EMAIL_QUERY )) {
+			preparedStatement.setString(1, client.getEmail());
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+					clients.add(
+							new Client(resultSet.getLong("id"),
+									resultSet.getString("nom"),
+									resultSet.getString("prenom"),
+									client.getEmail(),
+									resultSet.getDate("naissance").toLocalDate())
+					);
+				}
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche du client par email.", e);
+		}
+		return clients;
 	}
 
 }

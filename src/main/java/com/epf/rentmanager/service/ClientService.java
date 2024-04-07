@@ -48,12 +48,13 @@ public class ClientService {
 		}
 	}
 
-	public boolean valuesOk (Client client) throws ServiceException{
+	private boolean valuesOk (Client client) throws ServiceException{
 		Period period = Period.between(client.getNaissance(), LocalDate.now());
 
 		boolean nameOk = !Objects.equals(client.getNom(), "") && client.getNom().length() > 2;
 		boolean prenomOk = !Objects.equals(client.getPrenom(), "") && client.getPrenom().length() > 2;
 		boolean ageOk = period.getYears() >= 18;
+		boolean emailOk = emailUnique(client);
 
 		if (!nameOk){
 			throw new ServiceException("Un client ne peut pas avoir un nom null ou inferieur à 3 characteres.") ;
@@ -64,10 +65,13 @@ public class ClientService {
 		if (!ageOk){
 			throw new ServiceException("Un client ne peut pas avoir mois de 18 ans.") ;
 		}
+		if (!emailOk){
+			throw new ServiceException("Deux client ne peuvent pas avoir le meme email.") ;
+		}
 		return true; // if not true, return exception
 	}
 
-	public Client prepareValues (Client client){
+	private Client prepareValues (Client client){
 		client.setNom(client.getNom().toUpperCase());
 		return client;
 	}
@@ -103,6 +107,25 @@ public class ClientService {
 		} catch (DaoException e) {
 			throw new ServiceException("Erreur lors de la récupération du nombre de client.", e);
 		}
+	}
+
+	private boolean emailUnique(Client client) throws ServiceException {
+		List<Client> clients = null;
+		boolean emailUnique = true;
+
+		try {
+			 clients = clientDao.findByEmail(client);
+		} catch (DaoException e) {
+			throw new ServiceException("Erreur lors de la récupération des clients avec un email specifique.", e);
+		}
+
+		for (Client client1 : clients){
+            if (client.getId() != client1.getId()) {
+                emailUnique = false;
+                break;
+            }
+		}
+		return emailUnique;
 	}
 	
 }
