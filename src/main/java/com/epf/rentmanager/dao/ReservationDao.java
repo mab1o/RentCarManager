@@ -213,7 +213,7 @@ public class ReservationDao {
 				);
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Erreur lors de la recherche de la reservation : "+id, e);
+			throw new DaoException("Erreur lors de la recherche de la reservation : "+id + ".", e);
 		}
 		return null;
 	}
@@ -225,10 +225,10 @@ public class ReservationDao {
 			if (resultSet.next()) {
 				return resultSet.getInt(1);
 			} else {
-				throw new DaoException("Erreur lors de la récupération du nombre de reservation");
+				throw new DaoException("Erreur lors de la récupération du nombre de reservation.");
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation", e);
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation.", e);
 		}
 	}
 }

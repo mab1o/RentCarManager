@@ -43,7 +43,7 @@ public class  ReservationCreateServlet extends HttpServlet {
         try {
             clients = clientService.findAll();
         } catch (ServiceException e) {
-            throw new ServletException(e);
+            System.out.println("\nServletException: La liste des clients n'a pas pu etre trouvé." + e);
         }
         request.setAttribute("clients", clients);
 
@@ -51,14 +51,14 @@ public class  ReservationCreateServlet extends HttpServlet {
         try {
             vehicles = vehicleService.findAll();
         } catch (ServiceException e) {
-            throw new ServletException(e);
+            System.out.println("\nServletException: La liste des vehicles n'a pas pu etre trouvé." + e);
         }
         request.setAttribute("vehicles", vehicles);
 
         request.getRequestDispatcher("/WEB-INF/views/rents/create.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         long carId= Long.parseLong(
                 request.getParameter("car"));
         long clientId = Long.parseLong(
@@ -78,7 +78,7 @@ public class  ReservationCreateServlet extends HttpServlet {
         try {
             reservationService.create(reservation);
         } catch (ServiceException e) {
-            System.out.println(e);
+            System.out.println("\nServletException: La liste des clients n'a pas pu etre trouvé." + e);
         }
         response.sendRedirect(request.getContextPath() + "/rents");
     }

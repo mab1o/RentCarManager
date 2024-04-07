@@ -32,7 +32,7 @@ public class VehicleListServlet extends HttpServlet {
         try {
             vehicles = vehicleService.findAll();
         } catch (ServiceException e) {
-            throw new ServletException(e);
+            System.out.println("\nServletException: La liste des vehicles n' a pas pu etre trouvé"+e);
         }
 
         request.setAttribute("vehicles", vehicles);

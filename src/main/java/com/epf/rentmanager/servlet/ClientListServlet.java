@@ -33,10 +33,10 @@ public class ClientListServlet extends HttpServlet {
         try {
             clients = clientService.findAll();
         } catch (ServiceException e) {
-            throw new ServletException(e);
+            System.out.println("\nServletException: La liste n'a pas ete trouvé."+e);
+        } finally {
+            request.setAttribute("clients", clients);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
         }
-
-        request.setAttribute("clients", clients);
-        this.getServletContext().getRequestDispatcher("/WEB-INF/views/users/list.jsp").forward(request, response);
     }
 }

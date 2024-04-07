@@ -34,19 +34,17 @@ public class ReservationDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
         String reservationIdStr = request.getParameter("id");
         ReservationComplete reservationComplete = null;
-        int nbReservationCompletes = 0;
-        Reservation reservation = null;
 
         if (reservationIdStr != null && !reservationIdStr.isEmpty()) {
             long reservationId = Long.parseLong(reservationIdStr);
             try {
                 reservationComplete = reservationCompleteService.findById(reservationId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de l'affichage de detail du vehicle" + e);
+                System.out.println("\nServletException: Erreur lors de l'affichage de detail du vehicle."+ e);
             }
 
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas reconnu ou existant.");
         }
 
         request.setAttribute("reservationComplete",reservationComplete);

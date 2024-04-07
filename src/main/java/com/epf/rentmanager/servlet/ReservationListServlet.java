@@ -33,7 +33,7 @@ public class ReservationListServlet extends HttpServlet {
         try {
             reservationCompletes = reservationCompleteService.findAll();
         } catch (ServiceException e) {
-            throw new ServletException(e);
+            System.out.println("\nServletException: La liste des reservations n'a pas pu etre trouvé."+e);
         }
 
         request.setAttribute("reservationCompletes", reservationCompletes);

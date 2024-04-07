@@ -39,19 +39,19 @@ public class ClientUpdateServlet extends HttpServlet {
             this.clientId = Long.parseLong(clientIdStr);
             try {
                 client = clientService.findById(clientId);
+                request.setAttribute("client",client);
+                request.getRequestDispatcher("/WEB-INF/views/users/update.jsp").forward(request, response);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors la recherche du client :" + e);
+                response.sendRedirect(request.getContextPath() + "/users");
+                System.out.println("\nServletException: Erreur lors de la recherche du client." + e);
             }
-            request.setAttribute("client",client);
-            request.getRequestDispatcher("/WEB-INF/views/users/update.jsp").forward(request, response);
-
         } else {
             response.sendRedirect(request.getContextPath() + "/users");
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas existant.");
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (clientId != null) {
             String prenom = request.getParameter("firstname");
             String nom = request.getParameter("lastname");
@@ -71,11 +71,14 @@ public class ClientUpdateServlet extends HttpServlet {
                 clientService.update(client);
 
             } catch (ServiceException e) {
-                System.out.println("Erreur lors la recherche du client :" + e);
+                System.out.println("\nServletException: Erreur lors la recherche du client." + e);
+
+            } finally {
+                response.sendRedirect(request.getContextPath() + "/users");
             }
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            response.sendRedirect(request.getContextPath() + "/users");
+            System.out.println("\nServletException: L'id n'est pas existant.");
         }
-        response.sendRedirect(request.getContextPath() + "/users");
     }
 }

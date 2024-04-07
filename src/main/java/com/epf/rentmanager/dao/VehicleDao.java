@@ -144,10 +144,10 @@ public class VehicleDao {
 			if (resultSet.next()) {
 				return resultSet.getInt(1);
 			} else {
-				throw new DaoException("Erreur lors de la récupération du nombre de véhicules");
+				throw new DaoException("Erreur lors de la récupération du nombre de véhicules.");
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Erreur SQL lors de la récupération du nombre de véhicules", e);
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de véhicules.", e);
 		}
 	}
 

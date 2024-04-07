@@ -38,7 +38,7 @@ public class HomeServlet extends HttpServlet {
 		try {
 			vehicleCount = vehicleService.count();
 		} catch (ServiceException e) {
-			System.out.println(e);
+			System.out.println("\nServletException: Le nombre de vehicle n'a pas pu etre trouvé." + e);
 		}
 		request.setAttribute("vehicleCount", vehicleCount);
 
@@ -46,7 +46,7 @@ public class HomeServlet extends HttpServlet {
 		try {
 			clientCount = clientService.count();
 		} catch (ServiceException e) {
-			System.out.println(e);
+			System.out.println("\nServletException: Le nombre de client n'a pas pu etre trouvé" + e);
 		}
 		request.setAttribute("clientCount", clientCount);
 
@@ -54,7 +54,7 @@ public class HomeServlet extends HttpServlet {
 		try {
 			reservationCount = reservationService.count();
 		} catch (ServiceException e) {
-			System.out.println(e);
+			System.out.println("\nServletException: Le nombre de reservation n'a pas pu etre trouvé." + e);
 		}
 		request.setAttribute("reservationCount", reservationCount);
 

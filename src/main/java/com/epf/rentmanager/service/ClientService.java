@@ -31,7 +31,7 @@ public class ClientService {
             try {
                 return clientDao.create(client);
             } catch (DaoException e) {
-                throw new ServiceException("Le client n'a pas pu etre creer :",e);
+                throw new ServiceException("Le client n'a pas pu etre creer.",e);
             }
         }
 		return -1;
@@ -43,7 +43,7 @@ public class ClientService {
 			try {
 				clientDao.update(client);
 			} catch (DaoException e) {
-				throw new ServiceException("Le client n'a pas pu etre modifier :",e);
+				throw new ServiceException("Le client n'a pas pu etre modifier.",e);
 			}
 		}
 	}
@@ -56,13 +56,13 @@ public class ClientService {
 		boolean ageOk = period.getYears() >= 18;
 
 		if (!nameOk){
-			throw new ServiceException("Service : Un client ne peut pas avoir un nom null ") ;
+			throw new ServiceException("Un client ne peut pas avoir un nom null.") ;
 		}
 		if (!prenomOk){
-			throw new ServiceException("Service : Un client ne peut pas avoir un prenom null") ;
+			throw new ServiceException("Un client ne peut pas avoir un prenom null.") ;
 		}
 		if (!ageOk){
-			throw new ServiceException("Service : Un client ne peut pas avoir mois de 18 ans") ;
+			throw new ServiceException("Un client ne peut pas avoir mois de 18 ans.") ;
 		}
 		return true; // if not true, return exception
 	}
@@ -77,7 +77,7 @@ public class ClientService {
 			reservationDao.deleteByClient(id);
 			return clientDao.delete(id);
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la supression d'un client : ",e);
+			throw new ServiceException("Erreur lors de la supression d'un client.",e);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class ClientService {
         try {
             return clientDao.findById(id);
         } catch (DaoException e) {
-            throw new ServiceException("Erreur lors de rechercher du client : ",e);
+            throw new ServiceException("Erreur lors de rechercher du client.",e);
         }
     }
 
@@ -93,7 +93,7 @@ public class ClientService {
         try {
             return clientDao.findAll();
         } catch (DaoException e) {
-			throw new ServiceException("Erreur lors de rechercher des clients : ",e);
+			throw new ServiceException("Erreur lors de rechercher des clients.",e);
         }
     }
 
@@ -101,7 +101,7 @@ public class ClientService {
 		try {
 			return clientDao.count();
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la récupération du nombre de client", e);
+			throw new ServiceException("Erreur lors de la récupération du nombre de client.", e);
 		}
 	}
 	

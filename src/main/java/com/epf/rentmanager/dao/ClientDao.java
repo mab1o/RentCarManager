@@ -134,10 +134,10 @@ public class ClientDao {
 			if (resultSet.next()) {
 				return resultSet.getInt(1);
 			} else {
-				throw new DaoException("Erreur lors de la récupération du nombre de client");
+				throw new DaoException("Erreur lors de la récupération du nombre de client.");
 			}
 		} catch (SQLException e) {
-			throw new DaoException("Erreur SQL lors de la récupération du nombre de client", e);
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de client.", e);
 		}
 	}
 

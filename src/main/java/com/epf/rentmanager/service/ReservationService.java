@@ -22,7 +22,7 @@ public class ReservationService {
         try {
             return reservationDao.create(reservation);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation n'a pas pu etre crée.", e);
         }
     }
 
@@ -30,7 +30,7 @@ public class ReservationService {
         try {
             reservationDao.update(reservation);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation n'a pas pu etre modifié.", e);
         }
     }
 
@@ -38,7 +38,7 @@ public class ReservationService {
         try {
             return reservationDao.delete(id);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation n'a pas pu etre suprimer.", e);
         }
     }
 
@@ -46,7 +46,7 @@ public class ReservationService {
         try {
             return reservationDao.findResaByVehicleId(id);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation avec l'id vehicle "+ id +" n'a pas pu etre trouvé.", e);
         }
     }
 
@@ -54,7 +54,7 @@ public class ReservationService {
         try {
             return reservationDao.findResaByClientId(id);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation avec l'id client "+ id +" n'a pas pu etre trouvé.", e);
         }
     }
 
@@ -62,7 +62,7 @@ public class ReservationService {
         try {
             return reservationDao.findAll();
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La liste des reservations n'ont pas pu etre trouvé.", e);
         }
     }
 
@@ -70,7 +70,7 @@ public class ReservationService {
         try {
             return reservationDao.findById(id);
         } catch (DaoException e) {
-            throw new ServiceException("DAO : ", e);
+            throw new ServiceException("La reservation avec l'id "+ id +" n'a pas pu etre trouvé.", e);
         }
     }
 
@@ -78,7 +78,7 @@ public class ReservationService {
         try {
             return reservationDao.count();
         } catch (DaoException e) {
-            throw new ServiceException("Erreur lors de la récupération du nombre de reservation", e);
+            throw new ServiceException("Erreur lors de la récupération du nombre de reservation.", e);
         }
     }
 

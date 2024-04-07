@@ -44,16 +44,16 @@ public class VehicleDetailsServlet extends HttpServlet {
                 reservationCompletes = reservationCompleteService.findByVehicleId(vehicleId);
                 nbReservationCompletes = reservationCompletes.size();
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de l'affichage de detail du vehicle" + e);
+                System.out.println("\nServletException: Erreur lors de l'affichage de detail du vehicle."+e);
             }
 
             try {
                 vehicle = vehicleService.findById(vehicleId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de l'affichage de detail du vehicle" + e);
+                System.out.println("\nServletException: Erreur lors de l'affichage de detail du vehicle."+ e);
             }
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas reconnu ou existant.");
         }
 
         request.setAttribute("reservationCompletes",reservationCompletes);

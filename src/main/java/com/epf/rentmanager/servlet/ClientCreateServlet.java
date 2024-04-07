@@ -34,7 +34,7 @@ public class ClientCreateServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/views/users/create.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String prenom = request.getParameter("firstname");
         String nom = request.getParameter("lastname");
         String email = request.getParameter("email");
@@ -50,12 +50,10 @@ public class ClientCreateServlet extends HttpServlet {
 
         try {
             long id = clientService.create(client);
-            System.out.println("Un nouveau client a ete crée avec l'id :" + id);
-
         } catch (ServiceException e) {
-            System.out.println(e);
+            System.out.println("\nServletException: Erreur lors de la creation du client." + e);
+        } finally {
+            response.sendRedirect(request.getContextPath() + "/users");
         }
-
-        response.sendRedirect(request.getContextPath() + "/users");
     }
 }

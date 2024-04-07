@@ -38,18 +38,18 @@ public class  VehicleUpdateServlet extends HttpServlet {
             try {
                 vehicle = vehicleService.findById(vehicleId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors la recherche du vehicle :" + e);
+                System.out.println("\nServletException: Erreur lors la recherche du vehicle."+e);
             }
             request.setAttribute("vehicle",vehicle);
             request.getRequestDispatcher("/WEB-INF/views/vehicles/update.jsp").forward(request, response);
 
         } else {
             response.sendRedirect(request.getContextPath() + "/vehicles");
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas existant.");
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (vehicleId != null) {
             String manufacturer = request.getParameter("manufacturer");
             String model = request.getParameter("modele");
@@ -64,10 +64,10 @@ public class  VehicleUpdateServlet extends HttpServlet {
             try {
                 vehicleService.update(vehicle);
             } catch (ServiceException e) {
-                System.out.println(e);
+                System.out.println("\nServletException: Le vehicule n'a pas pu etre modifié."+e);
             }
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas reconnu ou existant.");
         }
         response.sendRedirect(request.getContextPath() + "/vehicles");
     }

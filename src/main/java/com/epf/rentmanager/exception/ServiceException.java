@@ -5,10 +5,10 @@ public class ServiceException extends Exception {
         super();
     }
     public ServiceException(String s) {
-        super(s);
+        super("\nService Exception: " + s);
     }
 
     public ServiceException(String message, Throwable cause) {
-        super(message, cause);
+        super("\nService Exception: " + message, cause);
     }
 }

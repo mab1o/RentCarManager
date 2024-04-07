@@ -26,7 +26,7 @@ public class ReservationDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
         String reservationIdStr = request.getParameter("id");
 
         if (reservationIdStr != null && !reservationIdStr.isEmpty()) {
@@ -34,10 +34,10 @@ public class ReservationDeleteServlet extends HttpServlet {
             try {
                 reservationService.delete(reservationId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de la suppression de la reservation" + e);
+                System.out.println("\nServletException: Erreur lors de la suppression de la reservation"+e);
             }
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas reconnu ou existant");
         }
         response.sendRedirect(request.getContextPath() + "/rents");
     }

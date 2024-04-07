@@ -24,12 +24,12 @@ public class VehicleService {
 
 	public long create(Vehicle vehicle) throws ServiceException {
 		if (vehicle.getConstructeur()== null || vehicle.getNb_places() <= 1){
-			throw new ServiceException("Un vehicule ne peut pas avoir un constructeur vide ou un nb place <= 1") ;
+			throw new ServiceException("Un vehicule ne peut pas avoir un constructeur vide ou un nb place <= 1.") ;
 		}else{
             try {
                 return vehicleDao.create(vehicle);
             } catch (DaoException e) {
-				throw new ServiceException("DAO : ",e);
+				throw new ServiceException("Le vehicle n'a pas pu etre créé.",e);
             }
         }
 	}
@@ -41,7 +41,7 @@ public class VehicleService {
 			try {
 				vehicleDao.update(vehicle);
 			} catch (DaoException e) {
-				throw new ServiceException("DAO : ",e);
+				throw new ServiceException("Le vehicle n'a pas pu etre modifié.",e);
 			}
 		}
 	}
@@ -51,7 +51,7 @@ public class VehicleService {
 			reservationDao.deleteByVehicle(id);
 			return vehicleDao.delete(id);
 		} catch (DaoException e) {
-			throw new ServiceException("DAO : ",e);
+			throw new ServiceException("Le vehicle n'a pas pu etre supprimé.",e);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class VehicleService {
         try {
             return vehicleDao.findById(id);
         } catch (DaoException e) {
-			throw new ServiceException("DAO : ",e);
+			throw new ServiceException("Le vehicle avec l'id " + id + " n'a pas pu etre trouvé.",e);
         }
     }
 
@@ -67,7 +67,7 @@ public class VehicleService {
         try {
             return vehicleDao.findAll();
         } catch (DaoException e) {
-			throw new ServiceException("DAO : ",e);
+			throw new ServiceException("La liste des vehicule n'a pas ete trouvé.",e);
         }
     }
 
@@ -75,7 +75,7 @@ public class VehicleService {
 		try {
 			return vehicleDao.count();
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la récupération du nombre de véhicules", e);
+			throw new ServiceException("Erreur lors de la récupération du nombre de véhicules.", e);
 		}
 	}
 	

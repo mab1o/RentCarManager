@@ -26,7 +26,7 @@ public class VehicleDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
         String vehicleIdStr = request.getParameter("id");
 
         if (vehicleIdStr != null && !vehicleIdStr.isEmpty()) {
@@ -34,10 +34,10 @@ public class VehicleDeleteServlet extends HttpServlet {
             try {
                 vehicleService.delete(vehicleId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de la suppression du véhicule" + e);
+                System.out.println("\nServletException: Erreur lors de la suppression du véhicule."+e);
             }
         } else {
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas existant.");
         }
         response.sendRedirect(request.getContextPath() + "/vehicles");
     }

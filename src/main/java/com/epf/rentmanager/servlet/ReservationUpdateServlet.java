@@ -50,7 +50,7 @@ public class  ReservationUpdateServlet extends HttpServlet {
             try {
                 clients = clientService.findAll();
             } catch (ServiceException e) {
-                throw new ServletException(e);
+                System.out.println("\nServletException: Liste client introuvable." + e);
             }
             request.setAttribute("clients", clients);
 
@@ -58,7 +58,7 @@ public class  ReservationUpdateServlet extends HttpServlet {
             try {
                 vehicles = vehicleService.findAll();
             } catch (ServiceException e) {
-                throw new ServletException(e);
+                System.out.println("\nServletException: Liste vehicle introuvable."+e);
             }
             request.setAttribute("vehicles", vehicles);
 
@@ -66,18 +66,18 @@ public class  ReservationUpdateServlet extends HttpServlet {
             try {
                 reservation = reservationService.findById(reservationId);
             } catch (ServiceException e) {
-                throw new ServletException(e);
+                System.out.println("\nServletException: La reservation avec l'id " + reservationId + "." +e);
             }
             request.setAttribute("reservation", reservation);
 
             request.getRequestDispatcher("/WEB-INF/views/rents/update.jsp").forward(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/rents");
-            System.out.println("L'id n'est pas reconnu ou existant");
+            System.out.println("\nServletException: L'id n'est pas reconnu ou existant.");
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         long carId= Long.parseLong(
                 request.getParameter("car"));
         long clientId = Long.parseLong(
@@ -98,7 +98,7 @@ public class  ReservationUpdateServlet extends HttpServlet {
         try {
             reservationService.update(reservation);
         } catch (ServiceException e) {
-            System.out.println(e);
+            System.out.println("\nServletException: La reservation n'a pas pu etre modifié."+e);
         }
         response.sendRedirect(request.getContextPath() + "/rents");
     }

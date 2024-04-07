@@ -26,7 +26,7 @@ public class ClientDeleteServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
         String clientIdStr = request.getParameter("id");
 
         if (clientIdStr != null && !clientIdStr.isEmpty()) {
@@ -34,11 +34,13 @@ public class ClientDeleteServlet extends HttpServlet {
             try {
                 clientService.delete(clientId);
             } catch (ServiceException e) {
-                System.out.println("Erreur lors de la suppression du client" + e);
+                System.out.println("\nServletException: Erreur lors de la suppression du client." + e);
+            } finally{
+                response.sendRedirect(request.getContextPath() + "/users");
             }
         } else {
-            System.out.println("L'id client n'est pas reconnu ou existant");
+            response.sendRedirect(request.getContextPath() + "/users");
+            System.out.println("L'id client n'est pas existant.");
         }
-        response.sendRedirect(request.getContextPath() + "/users");
     }
 }

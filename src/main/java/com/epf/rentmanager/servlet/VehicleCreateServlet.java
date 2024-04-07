@@ -32,7 +32,7 @@ public class VehicleCreateServlet extends HttpServlet{
         request.getRequestDispatcher("/WEB-INF/views/vehicles/create.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String manufacturer = request.getParameter("manufacturer");
         String model = request.getParameter("modele");
         int numberOfSeats = Integer.parseInt(request.getParameter("seats"));
@@ -44,10 +44,8 @@ public class VehicleCreateServlet extends HttpServlet{
 
         try {
             long id = vehicleService.create(vehicle);
-            System.out.println("Un nouveau vehicule a ete crée avec l'id :" + id);
-
         } catch (ServiceException e) {
-            System.out.println(e);
+            System.out.println("\nServletException: Erreur lors de la suppression du client." + e);
         }
 
         response.sendRedirect(request.getContextPath() + "/vehicles");
