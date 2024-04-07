@@ -45,7 +45,7 @@ public class VehicleCreateServlet extends HttpServlet{
         try {
             long id = vehicleService.create(vehicle);
         } catch (ServiceException e) {
-            System.out.println("\nServletException: Erreur lors de la suppression du client." + e);
+            System.out.println("\nServletException: Erreur lors de la creation du vehicle." + e);
         }
 
         response.sendRedirect(request.getContextPath() + "/vehicles");
