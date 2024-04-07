@@ -41,8 +41,12 @@ public class ReservationService {
 
     private boolean valueOk(Reservation reservation) throws ServiceException{
         boolean vehicleOk = countNbReservation(reservation) == 0;
+        boolean debutBeforeFin = reservation.getDebut().isBefore(reservation.getFin());
         if(!vehicleOk){
             throw new ServiceException("Le vehicle est deja utilisé sur autre reservation");
+        }
+        if(!debutBeforeFin){
+            throw new ServiceException("La reservation doit avoir une date de debut anterieur a sa date de fin");
         }
         return true;
     }
