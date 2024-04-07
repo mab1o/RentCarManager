@@ -149,7 +149,7 @@ public class ReservationService {
             reservations.add(ind+1,reservation);
 
             // Count max day
-            int nbDay = 0;
+            long nbDay = 0;
             for (int i = 0; i < reservations.size()-1;i++){
                 Reservation reservation1 = reservations.get(i);
                 Reservation reservation2 = reservations.get(i+1);
@@ -160,8 +160,7 @@ public class ReservationService {
                 LocalDate fin2 = reservation2.getFin();
 
                 // test if pause between two rents
-                boolean test = ChronoUnit.DAYS.between(debut1, fin1) + ChronoUnit.DAYS.between(debut2, fin2)
-                        == ChronoUnit.DAYS.between(debut1, fin2);
+                boolean test = ChronoUnit.DAYS.between(fin1, debut2) - 1 == 0;
                 if (test){
                     nbDay += ChronoUnit.DAYS.between(debut1, fin2);
                 } else {
