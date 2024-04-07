@@ -47,7 +47,11 @@ public class ReservationDao {
 			"FROM Reservation " +
 			"WHERE vehicle_id=? AND client_id=? AND " +
 			"((debut <= ? AND fin = ?) OR (debut = ? AND fin >= ?));";
-		
+	public static final String RESERVATION_SAME_VEHICLE_QUERY = "SELECT id, client_id, debut, fin " +
+			"FROM Reservation " +
+			"WHERE vehicle_id=? AND ((debut BETWEEN ? AND ?) OR (fin BETWEEN ? AND ?)) " +
+			"ORDER BY debut ASC;";
+
 	public long create(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
 			 PreparedStatement preparedStatement =
@@ -294,6 +298,39 @@ public class ReservationDao {
 			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation entre deux dates " +
 					"données pour un client et un vehicule donnée.", e);
 		}
+	}
+
+	public List<Reservation> findAllIn30DaysAround(Reservation reservation) throws DaoException {
+		List<Reservation> reservations = new ArrayList<>();
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(RESERVATION_SAME_VEHICLE_QUERY);) {
+			long duree = ChronoUnit.DAYS.between(reservation.getDebut(), reservation.getFin());
+			long dureeMax = 30L;
+			LocalDate debutMin = reservation.getDebut().minusDays(dureeMax-duree);
+			LocalDate finMax = reservation.getFin().plusDays(dureeMax-duree);
+
+			preparedStatement.setLong(1,reservation.getVehicule_id());
+			preparedStatement.setDate(2,Date.valueOf(debutMin));
+			preparedStatement.setDate(3,Date.valueOf(finMax));
+			preparedStatement.setDate(4,Date.valueOf(debutMin));
+			preparedStatement.setDate(5,Date.valueOf(finMax));
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next()) {
+				reservations.add(
+						new Reservation(resultSet.getLong("id"),
+								resultSet.getLong("client_id"),
+								reservation.getVehicule_id(),
+								resultSet.getDate("debut").toLocalDate(),
+								resultSet.getDate("fin").toLocalDate()
+						)
+				);
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur lors de la recherche de tous les reservations autour des 30 jour de " +
+					"la reservation donnée.", e);
+		}
+		return reservations;
 	}
 
 }
