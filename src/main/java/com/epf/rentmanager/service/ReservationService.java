@@ -19,19 +19,32 @@ public class ReservationService {
     }
 
     public long create(Reservation reservation) throws ServiceException {
-        try {
-            return reservationDao.create(reservation);
-        } catch (DaoException e) {
-            throw new ServiceException("La reservation n'a pas pu etre crée.", e);
+        if(valueOk(reservation)){
+            try {
+                return reservationDao.create(reservation);
+            } catch (DaoException e) {
+                throw new ServiceException("La reservation n'a pas pu etre crée.", e);
+            }
         }
+        return 0;
     }
 
     public void update(Reservation reservation) throws ServiceException {
-        try {
-            reservationDao.update(reservation);
-        } catch (DaoException e) {
-            throw new ServiceException("La reservation n'a pas pu etre modifié.", e);
+        if(valueOk(reservation)){
+            try {
+                reservationDao.update(reservation);
+            } catch (DaoException e) {
+                throw new ServiceException("La reservation n'a pas pu etre modifié.", e);
+            }
         }
+    }
+
+    private boolean valueOk(Reservation reservation) throws ServiceException{
+        boolean vehicleOk = countNbReservation(reservation) == 0;
+        if(!vehicleOk){
+            throw new ServiceException("Le vehicle est deja utilisé sur autre reservation");
+        }
+        return true;
     }
 
     public long delete(long id) throws ServiceException {
@@ -79,6 +92,14 @@ public class ReservationService {
             return reservationDao.count();
         } catch (DaoException e) {
             throw new ServiceException("Erreur lors de la récupération du nombre de reservation.", e);
+        }
+    }
+
+    private int countNbReservation(Reservation reservation) throws ServiceException {
+        try {
+            return reservationDao.countBetweenDateForAVehicle(reservation);
+        } catch (DaoException e){
+            throw new ServiceException("Erreur lors de la récupération du nombre de reservation entre deux dates.");
         }
     }
 

@@ -35,6 +35,12 @@ public class ReservationDao {
 			= "SELECT COUNT(*) FROM Reservation;";
 	private static final String UPDATE_RESERVATION_QUERY
 			= "UPDATE Reservation SET client_id=?, vehicle_id=?, debut=?, fin=? WHERE id=?;";
+	public static final String COUNT_RESERVATION_SAME_DATE_QUERY = "SELECT COUNT(*) " +
+			"FROM Reservation " +
+			"WHERE vehicle_id=? AND" +
+			"((debut >= ? AND debut <= ?) " +
+			"OR (fin >= ? AND fin <= ?)" +
+			"OR (debut <= ? AND fin >= ?));";
 		
 	public long create(Reservation reservation) throws DaoException {
 		try (Connection connection = ConnectionManager.getConnection();
@@ -231,4 +237,26 @@ public class ReservationDao {
 			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation.", e);
 		}
 	}
+
+	public int countBetweenDateForAVehicle(Reservation reservation) throws DaoException {
+		try (Connection connection = ConnectionManager.getConnection();
+			 PreparedStatement preparedStatement = connection.prepareStatement(COUNT_RESERVATION_SAME_DATE_QUERY);) {
+			preparedStatement.setLong(1,reservation.getVehicule_id());
+			preparedStatement.setDate(2,Date.valueOf(reservation.getDebut()));
+			preparedStatement.setDate(3,Date.valueOf(reservation.getFin()));
+			preparedStatement.setDate(4,Date.valueOf(reservation.getDebut()));
+			preparedStatement.setDate(5,Date.valueOf(reservation.getFin()));
+			preparedStatement.setDate(6,Date.valueOf(reservation.getDebut()));
+			preparedStatement.setDate(7,Date.valueOf(reservation.getFin()));
+			ResultSet resultSet = preparedStatement.executeQuery();
+			if (resultSet.next()) {
+				return resultSet.getInt(1);
+			} else {
+				throw new DaoException("Erreur lors de la récupération du nombre de reservation entre deux dates données.");
+			}
+		} catch (SQLException e) {
+			throw new DaoException("Erreur SQL lors de la récupération du nombre de reservation entre deux dates données.", e);
+		}
+	}
+
 }
